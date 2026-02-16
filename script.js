@@ -1,14 +1,7 @@
 // Interactive JavaScript for portfolio animations and functionality
 
-// Initialize AOS (Animate On Scroll)
-AOS.init({
-    duration: 1000,
-    once: true,
-    offset: 100
-});
-
 // Typing animation for hero section
-const typedTextElement = document.getElementById('typed-text');
+let typedTextElement;
 const roles = [
     'Computer Science Student',
     'Full Stack Developer',
@@ -22,6 +15,7 @@ let isDeleting = false;
 let typingSpeed = 100;
 
 function typeText() {
+    if (!typedTextElement) return;
     const currentRole = roles[roleIndex];
     
     if (isDeleting) {
@@ -48,6 +42,16 @@ function typeText() {
 
 // Start typing animation when page loads
 document.addEventListener('DOMContentLoaded', () => {
+    // Initialize AOS (Animate On Scroll)
+    if (typeof AOS !== 'undefined') {
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+    }
+
+    typedTextElement = document.getElementById('typed-text');
     typeText();
     createParticles();
     initializeScrollEffects();
@@ -108,21 +112,14 @@ function initializeMobileMenu() {
     
     if (mobileMenuBtn && mobileMenu) {
         mobileMenuBtn.addEventListener('click', () => {
-            if (mobileMenu.style.maxHeight === '0px' || !mobileMenu.style.maxHeight) {
-                mobileMenu.style.maxHeight = '400px';
-                mobileMenu.style.opacity = '1';
-            } else {
-                mobileMenu.style.maxHeight = '0px';
-                mobileMenu.style.opacity = '0';
-            }
+            mobileMenu.classList.toggle('show');
         });
         
         // Close mobile menu when clicking on a link
         const mobileLinks = mobileMenu.querySelectorAll('a');
         mobileLinks.forEach(link => {
             link.addEventListener('click', () => {
-                mobileMenu.style.maxHeight = '0px';
-                mobileMenu.style.opacity = '0';
+                mobileMenu.classList.remove('show');
             });
         });
     }
